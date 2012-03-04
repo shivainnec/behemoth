@@ -64,14 +64,15 @@ public class SOLRIndexerJob extends Configured implements Tool {
 
         final FileSystem fs = FileSystem.get(getConf());
 
-        if (args.length != 2) {
-            String syntax = "com.digitalpebble.solr.SOLRIndexerJob in solrURL";
+        if (args.length != 3) {
+            String syntax = "com.digitalpebble.solr.SOLRIndexerJob <input path> <collection> <Zookeeper host:port>";
             System.err.println(syntax);
             return -1;
         }
 
         Path inputPath = new Path(args[0]);
-        String solrURL = args[1];
+        String collection = args[1];
+        String zk = args[2];
 
         JobConf job = new JobConf(getConf());
 
@@ -94,7 +95,8 @@ public class SOLRIndexerJob extends Configured implements Tool {
                 + new Random().nextInt());
         FileOutputFormat.setOutputPath(job, tmp);
 
-        job.set("solr.server.url", solrURL);
+        job.set("solr.zkhost", zk);
+        job.set("solr.zk.collection", collection);
 
         try {
             JobClient.runJob(job);
