@@ -28,7 +28,7 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrServer;
-import org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer;
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 
 import com.digitalpebble.behemoth.Annotation;
@@ -54,7 +54,7 @@ public class SOLRWriter {
         String solrURL = job.get("solr.server.url");
         int queueSize = job.getInt("solr.client.queue.size", 100);
         int threadCount = job.getInt("solr.client.threads", 1);
-        solr = new StreamingUpdateSolrServer(solrURL, queueSize, threadCount);
+        solr = new ConcurrentUpdateSolrServer(solrURL, queueSize, threadCount);
       }
         // get the Behemoth annotations types and features
         // to store as SOLR fields
